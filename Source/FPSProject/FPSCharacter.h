@@ -2,14 +2,11 @@
 
 #pragma once
 
-/*
-UFUNCTION 宏(位于每个函数的上方) 让引擎可以发觉这些函数，以便将他们纳入序列化和其他引擎功能中
-*/
-
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "FPSProjectile.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -24,6 +21,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// 要生成的发射物类
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AFPSProjectile> ProjectileClass;
 
 public:	
 	// Called every frame
@@ -48,6 +49,10 @@ public:
 	UFUNCTION()
 	void StopJump();
 
+	// 处理发射物射击的函数
+	UFUNCTION()
+	void Fire();
+
 	// FPS摄像机
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FPSCameraComponent;
@@ -55,4 +60,8 @@ public:
 	// 第一人称网格体(手臂)，仅对所属玩家可见
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* FPSMesh;
+
+	// 枪口相对于摄像机位置的偏移
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector MuzzleOffset;
 };
